@@ -2,7 +2,7 @@ import requests
 import datetime
 import json
 
-def pedirDatosUlt(pais):
+def pedirDatosUlt(slug):
     url = "https://api.covid19api.com/summary"
     payload = {}
     headers= {}
@@ -11,7 +11,7 @@ def pedirDatosUlt(pais):
     todos = json.loads(response.text)
     paises = todos.get("Countries")
     for pais in paises:
-        if pais.get("Country") == pais:
+        if pais.get("Slug") == slug:
             return pais
 
 def pedirDatosDias(slug):

@@ -1,10 +1,21 @@
 from tkinter import *
 from tkinter import messagebox
+from BaseDatos import crearTabla, ValidateLogin, Update, SelectFrom
+from api import pedirDatosDias, pedirDatosUlt, pedirPaises
 import os
 
 root = Tk()
 root.config(bg = "lightblue")
 root.resizable(0,0)
+
+# Email
+
+with open("temp", "r") as f:
+    email = f.read()
+    f.close()
+    
+
+#crearTabla()
 
 frame = Frame(root)
 frame.config(bg = "lightblue")
@@ -30,7 +41,7 @@ def aboutUs():
     messagebox.showinfo("Información","Somos tres estudiantes de la EEST N°7 Quilmes 'IMPA'\n-Casareski Juan\n-Paletta Lautaro\n-Torres Santiago")
 
 def abrirEditor():
-    os.system("python Graficos/Update.py")
+    os.system("python App/Update.py")
 
 def limpiar():
     nombreUsuario.set("")
@@ -43,12 +54,24 @@ def limpiar():
     recuperados.set("")
     decesos.set("")
 
+
 # VARIABLES
 
 nombreUsuario = StringVar()
 apellidoUsuario = StringVar()
 paisUsuario = StringVar()
 ultAct = StringVar()
+
+# Funciones
+resultado = SelectFrom(email)
+nombreUsuario.set(resultado[0])
+apellidoUsuario.set(resultado[1])
+paisUsuario.set(resultado[4])
+
+datos = pedirDatosUlt(resultado[5])
+ultAct.set(datos["Date"])
+
+# Titulo
     
 titulo = Label(frame, text = "API COVID19", font = ("Impact", 24))
 titulo.config(bg = "lightblue")
@@ -86,8 +109,6 @@ lbl_ult.config(bg = "lightblue")
 txt_ult = Entry(frame, textvariable = ultAct)
 txt_ult.grid(row=4, column=1, padx=10, pady=5)
 
-# DATOS PAIS
-
 # VARIABLES
 nuevosContagios = StringVar()
 nuevosDecesos = StringVar()
@@ -95,6 +116,16 @@ contagiados = StringVar()
 activos = StringVar()
 recuperados = StringVar()
 decesos = IntVar()
+
+# Funciones
+
+nuevosContagios.set(datos["NewConfirmed"])
+nuevosDecesos.set(datos["NewDeaths"])
+
+contagiados.set(datos["TotalConfirmed"])
+activos.set(datos["TotalConfirmed"] - datos["TotalRecovered"])
+recuperados.set(datos["TotalRecovered"])
+decesos.set(datos["TotalDeaths"])
 
 frameDatos = Frame(root)
 frameDatos.pack()
@@ -153,6 +184,5 @@ lbl_nombre.config(bg = "lightblue")
 txt_nombre = Entry(frameDatos, textvariable = decesos)
 txt_nombre.grid(row=7, column=1, padx=10, pady=5)
 
-
-limpiar()
+#limpiar()
 root.mainloop()

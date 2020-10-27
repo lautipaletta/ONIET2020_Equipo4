@@ -1,13 +1,19 @@
 from tkinter import *
+from tkinter import messagebox
+from BaseDatos import ValidateLogin, agregar
 import os
+#agregar()
 
 # Funciones
 
-def login():
-    #validacion:
-        os.system("python Graficos/App.py")
-    #else:
-        #incorrecto
+def login(email, password):
+    if ValidateLogin(email, password):
+        with open("temp", "w") as f:
+            f.write(email)
+            f.close()
+        os.system("python App/App.py")
+    else:
+        messagebox.showerror("Error", "Usuario o contraseña incorrectos")
 
 # TKINTER login
 
@@ -43,12 +49,13 @@ lbl_password.config(bg = "lightblue")
 lbl_password.grid(row=1, column=0, padx=10, pady=10)
 
 txt_password = Entry(frame, textvariable = passwordUsuario)
+txt_password.config(show = "*")
 txt_password.grid(row=1, column=1, padx=10, pady=10)
 
 # BOTONES
 
 
-botonLogin = Button(frame, text="Iniciar Sesión", command = lambda:login())
+botonLogin = Button(frame, text="Iniciar Sesión", command = lambda:login(txt_email.get(), txt_password.get()))
 botonLogin.grid(row=2, column=1, padx=10, pady=10)
 
 root.mainloop()
