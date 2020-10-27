@@ -1,13 +1,14 @@
 import sqlite3
 
+
 CREATE TABLE [IF NOT EXISTS] APPCOVID (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
     first TEXT NOT NULL ,
 	last TEXT NOT NULL,
-	email TEXT NOT NULL,
+	email TEXT NOT NULL PRIMARY KEY,
     password BLOB NOT NULL,
     country TEXT NOT NULL,
-    countrycode TEXT NOT NULL
+    countrycode TEXT NOT NULL,
+    lastlogin DATE
 )
 
 
